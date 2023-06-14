@@ -3,7 +3,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
 import { TodoContext, UserContext } from "./contexts/TodoContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AddTodo from "./pages/AddTodo";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
@@ -43,18 +43,20 @@ function Layout() {
 function Login() {
   const [username, setUsername] = useLocalStorage("username", "");
   const [password, setPassword] = useLocalStorage("password", "");
+  const [error, setError] = useState("");
   const { setLoggedInUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   function handleLogin(event) {
     event.preventDefault();
-    // Find the user based on the entered username
     const loggedInUser = users.find(
       (user) => user.user === username && user.password === password
     );
     if (loggedInUser) {
       setLoggedInUser(loggedInUser);
       navigate("/");
+    } else {
+      setError("Invalid username or password");
     }
   }
 
@@ -82,6 +84,7 @@ function Login() {
             required
           />
         </Form.Group>
+        <p>{error}</p>
         <Button variant="primary" type="submit">
           Login
         </Button>
