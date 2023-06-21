@@ -60,12 +60,12 @@ export default function EditTodo() {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="title">
-          <Form.Label>Title</Form.Label>
+          <Form.Label>Exercise</Form.Label>
           <Form.Control
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             type="text"
-            placeholder="Get software developer job"
+            placeholder="Bench Press"
             required
           />
         </Form.Group>
@@ -76,7 +76,7 @@ export default function EditTodo() {
             onChange={(e) => setDescription(e.target.value)}
             as="textarea"
             rows={3}
-            placeholder="1. Create amazing project\n2. Apply to Google & Netflix\n3. Crush interview"
+            placeholder={`Working Muscles: Chest, Triceps, Deltoids\nThe bar should not travel straight up and down,\nFocus on moving the weight by squeezing your chest together`}
             required
           />
         </Form.Group>
@@ -86,7 +86,7 @@ export default function EditTodo() {
             value={sets}
             onChange={(event) => setSets(event.target.value)}
             type="number"
-            placeholder="8"
+            placeholder="Your sets goal. Ex: 4"
             required
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>

@@ -72,7 +72,7 @@ export default function AddTodo() {
             value={sets}
             onChange={(event) => setSets(event.target.value)}
             type="number"
-            placeholder="8"
+            placeholder="Your sets goal. Ex: 4"
             required
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
