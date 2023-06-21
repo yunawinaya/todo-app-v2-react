@@ -1,13 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
-import { TodoContext } from "../contexts/TodoContext";
+import { useDispatch } from "react-redux";
+import { deleteTodo } from "../features/todos/todoSlice";
 
 export default function TodoCard({ todo }) {
   const completed = todo.completed;
   const border = completed ? "success" : "danger";
   const [timer, setTimer] = useState(0);
   const [timerInterval, setTimeInterval] = useState(null);
-  const setTodos = useContext(TodoContext).setTodos;
+  const dispatch = useDispatch();
 
   const [show, setShow] = useState(false);
 
@@ -34,10 +35,8 @@ export default function TodoCard({ todo }) {
     setTimer(0);
   };
 
-  const deleteTodo = () => {
-    setTodos((prevTodos) =>
-      prevTodos.filter((prevTodo) => prevTodo.id !== todo.id)
-    );
+  const handleDeleteTodo = () => {
+    dispatch(deleteTodo(todo.id));
   };
 
   useEffect(() => {
@@ -83,7 +82,7 @@ export default function TodoCard({ todo }) {
               <Button variant="secondary" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button variant="danger" onClick={deleteTodo}>
+              <Button variant="danger" onClick={handleDeleteTodo}>
                 Delete
               </Button>
             </Modal.Footer>

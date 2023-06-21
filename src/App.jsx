@@ -2,13 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
-import { TodoContext, UserContext } from "./contexts/TodoContext";
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import AddTodo from "./pages/AddTodo";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import EditTodo from "./pages/EditTodo";
 import { Form, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoggedInUser } from "./features/todos/userSlice";
 
 const users = [
   { id: 1, user: "admin1", password: "admin" },
@@ -16,7 +17,7 @@ const users = [
 ];
 
 function Layout() {
-  const { loggedInUser } = useContext(UserContext);
+  const loggedInUser = useSelector((state) => state.user);
 
   return (
     <>
@@ -44,7 +45,7 @@ function Login() {
   const [username, setUsername] = useLocalStorage("username", "");
   const [password, setPassword] = useLocalStorage("password", "");
   const [error, setError] = useState("");
-  const { setLoggedInUser } = useContext(UserContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function handleLogin(event) {
@@ -53,7 +54,7 @@ function Login() {
       (user) => user.user === username && user.password === password
     );
     if (loggedInUser) {
-      setLoggedInUser(loggedInUser);
+      dispatch(setLoggedInUser(loggedInUser));
       navigate("/");
     } else {
       setError("Invalid username or password");
@@ -94,11 +95,11 @@ function Login() {
 }
 
 function Logout() {
-  const { setLoggedInUser } = useContext(UserContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function handleLogout() {
-    setLoggedInUser(null);
+    dispatch(setLoggedInUser(null));
     navigate("/");
   }
 
@@ -114,25 +115,29 @@ function Logout() {
 }
 
 export default function App() {
-  const [todos, setTodos] = useLocalStorage("todos", []);
-  const [loggedInUser, setLoggedInUser] = useLocalStorage("loggedInUser", null);
+  const loggedInUser = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (loggedInUser) {
+      dispatch(setLoggedInUser(loggedInUser));
+    }
+  }, [loggedInUser, dispatch]);
 
   return (
-    <TodoContext.Provider value={{ todos, setTodos }}>
-      <UserContext.Provider value={{ loggedInUser, setLoggedInUser }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="add" element={<AddTodo />} />
-              <Route path="login" element={<Login />} />
-              <Route path="logout" element={<Logout />} />
-              <Route path="*" element={<ErrorPage />} />
-              <Route path="todo/:id" element={<EditTodo />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </UserContext.Provider>
-    </TodoContext.Provider>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="add" element={<AddTodo />} />
+            <Route path="login" element={<Login />} />
+            <Route path="logout" element={<Logout />} />
+            <Route path="*" element={<ErrorPage />} />
+            <Route path="todo/:id" element={<EditTodo />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }

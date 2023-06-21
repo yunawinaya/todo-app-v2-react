@@ -1,19 +1,20 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
-import { TodoContext, UserContext } from "../contexts/TodoContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo } from "../features/todos/todoSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function AddTodo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [completed, setCompleted] = useState(false);
-  const { setTodos } = useContext(TodoContext);
-  const { loggedInUser } = useContext(UserContext);
+  const loggedInUser = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function addTodo(event) {
+  function handleAddTodo(event) {
     event.preventDefault();
     const newTodo = {
       id: Date.now(),
@@ -22,14 +23,14 @@ export default function AddTodo() {
       description,
       completed,
     };
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    dispatch(addTodo(newTodo));
     navigate("/");
   }
 
   return (
     <Container>
       <h1 className="my-3">Add Todo</h1>
-      <Form onSubmit={addTodo}>
+      <Form onSubmit={handleAddTodo}>
         <Form.Group className="mb-3" controlId="title">
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -54,7 +55,7 @@ export default function AddTodo() {
         <Form.Check
           type="checkbox"
           id="completed"
-          label="mark as completed"
+          label="Mark as completed"
           checked={completed}
           onChange={(event) => setCompleted(event.target.checked)}
           className="mb-3"

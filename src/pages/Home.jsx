@@ -1,11 +1,10 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { Col, Container, Row } from "react-bootstrap";
 import TodoCard from "../components/TodoCard";
-import { TodoContext, UserContext } from "../contexts/TodoContext";
 
 export default function Home() {
-  const { todos } = useContext(TodoContext);
-  const { loggedInUser } = useContext(UserContext);
+  const todos = useSelector((state) => state.todos);
+  const loggedInUser = useSelector((state) => state.user);
 
   const userTodos = todos.filter((todo) => todo.userId === loggedInUser?.id);
 
