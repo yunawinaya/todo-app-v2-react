@@ -46,11 +46,13 @@ export default function TodoCard({ todo }) {
     };
   }, [timerInterval]);
 
-  const count = useSelector((state) => state.counter.value);
+  const cardId = todo.id;
+
+  const count = useSelector((state) => state.counter[cardId] || 0);
 
   const handleIncrement = () => {
     if (count < todo.sets) {
-      dispatch(increment());
+      dispatch(increment({ cardId }));
     }
   };
 
@@ -73,7 +75,7 @@ export default function TodoCard({ todo }) {
             </Button>
             <Button
               variant="outline-secondary"
-              onClick={() => dispatch(reset())}
+              onClick={() => dispatch(reset({ cardId }))}
               size="sm"
               className="ms-1"
             >

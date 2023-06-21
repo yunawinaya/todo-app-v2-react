@@ -2,15 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const counterSlice = createSlice({
   name: "counter",
-  initialState: {
-    value: 0,
-  },
+  initialState: {}, // Initialize as an empty object
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    increment: (state, action) => {
+      const { cardId } = action.payload;
+      if (state[cardId]) {
+        state[cardId] += 1;
+      } else {
+        state[cardId] = 1;
+      }
     },
-    reset: (state) => {
-      state.value = 0;
+    reset: (state, action) => {
+      const { cardId } = action.payload;
+      state[cardId] = 0;
     },
   },
 });
