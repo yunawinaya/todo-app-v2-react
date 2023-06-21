@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTodo } from "../features/todos/todoSlice";
+import { deleteTodo, updateTodo } from "../features/todos/todoSlice";
 import { increment, reset } from "../features/todos/counterSlice";
 
 export default function TodoCard({ todo }) {
@@ -53,16 +53,69 @@ export default function TodoCard({ todo }) {
   };
 
   const cardId = todo.id;
-  const [completed, setCompleted] = useState(false);
 
   const count = useSelector((state) => state.counter[cardId] || 0);
+
+  const [date, setDate] = useState(todo?.date || "");
+  const [title, setTitle] = useState(todo?.title || "");
+  const [description, setDescription] = useState(todo?.description || "");
+  const [sets, setSets] = useState(todo?.sets || "");
+  const [completed, setCompleted] = useState(todo?.completed || false);
+
+  useEffect(() => {
+    setDate(todo?.date || "");
+    setTitle(todo?.title || "");
+    setDescription(todo?.description || "");
+    setSets(todo?.sets || "");
+    setCompleted(todo?.completed || false);
+  }, [todo]);
 
   const handleIncrement = () => {
     if (count < todo.sets) {
       dispatch(increment({ cardId }));
-    } else if (count >= todo.sets) {
-      setCompleted(true);
     }
+  };
+
+  useEffect(() => {
+    if (count >= todo.sets) {
+      setCompleted(true);
+      const updatedTodo = {
+        id: todo.id,
+        userId: todo.userId,
+        date,
+        title,
+        description,
+        sets,
+        completed: completed,
+      };
+      dispatch(updateTodo(updatedTodo));
+    }
+  }, [
+    count,
+    todo.sets,
+    completed,
+    todo.id,
+    todo.userId,
+    date,
+    title,
+    description,
+    sets,
+    dispatch,
+  ]);
+
+  const handleReset = () => {
+    dispatch(reset({ cardId }));
+    setCompleted(false);
+    const updatedTodo = {
+      id: todo.id,
+      userId: todo.userId,
+      date,
+      title,
+      description,
+      sets,
+      completed: !completed,
+    };
+    dispatch(updateTodo(updatedTodo));
   };
 
   return (
@@ -84,7 +137,7 @@ export default function TodoCard({ todo }) {
             </Button>
             <Button
               variant="outline-secondary"
-              onClick={() => dispatch(reset({ cardId }))}
+              onClick={handleReset}
               size="sm"
               className="ms-1"
             >

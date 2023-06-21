@@ -8,9 +8,17 @@ export default function Home() {
 
   const userTodos = todos.filter((todo) => todo.userId === loggedInUser?.id);
 
+  const completedTodos = userTodos.filter((todo) => todo.completed);
+  const totalTodos = userTodos.length;
+  const completionPercentage =
+    totalTodos > 0 ? (completedTodos.length / totalTodos) * 100 : 0;
+
   return (
     <Container>
       <h1 className="my-3">🏋🏼 Start Your Workout Routines!</h1>
+      <p>Total Workouts: {totalTodos}</p>
+      <p>Completed Workouts: {completedTodos.length}</p>
+      <p>Completion Percentage: {completionPercentage.toFixed(2)}%</p>
       <Row>
         <CardGroup todos={userTodos} />
       </Row>

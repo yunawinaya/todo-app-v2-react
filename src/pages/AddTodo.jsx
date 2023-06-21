@@ -11,6 +11,7 @@ export default function AddTodo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [sets, setSets] = useState("");
+  const [completed, setCompleted] = useState(false);
   const loggedInUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export default function AddTodo() {
       title,
       description,
       sets,
+      completed,
     };
     dispatch(addTodo(newTodo));
     navigate("/");
@@ -75,6 +77,14 @@ export default function AddTodo() {
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
         </InputGroup>
+        <Form.Check
+          type="checkbox"
+          id="completed"
+          label="Mark as completed"
+          checked={completed}
+          onChange={(event) => setCompleted(event.target.checked)}
+          className="mb-3"
+        />
         <Button variant="primary" type="submit">
           Submit
         </Button>

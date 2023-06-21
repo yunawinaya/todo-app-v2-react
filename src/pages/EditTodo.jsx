@@ -19,12 +19,14 @@ export default function EditTodo() {
   const [title, setTitle] = useState(todo?.title || "");
   const [description, setDescription] = useState(todo?.description || "");
   const [sets, setSets] = useState(todo?.sets || "");
+  const [completed, setCompleted] = useState(todo?.completed || false);
 
   useEffect(() => {
     setDate(todo?.date || "");
     setTitle(todo?.title || "");
     setDescription(todo?.description || "");
     setSets(todo?.sets || "");
+    setCompleted(todo?.completed || false);
   }, [todo]);
 
   const handleUpdateTodo = (event) => {
@@ -37,6 +39,7 @@ export default function EditTodo() {
       title,
       description,
       sets,
+      completed,
     };
 
     dispatch(updateTodo(updatedTodo));
@@ -88,6 +91,14 @@ export default function EditTodo() {
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
         </InputGroup>
+        <Form.Check
+          type="checkbox"
+          id="completed"
+          label="Mark as completed"
+          checked={completed}
+          onChange={(e) => setCompleted(e.target.checked)}
+          className="mb-3"
+        />
         <Button variant="primary" type="submit">
           Submit
         </Button>
