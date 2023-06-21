@@ -5,8 +5,6 @@ import { deleteTodo } from "../features/todos/todoSlice";
 import { increment, reset } from "../features/todos/counterSlice";
 
 export default function TodoCard({ todo }) {
-  const completed = todo.completed;
-  const border = completed ? "success" : "danger";
   const [timer, setTimer] = useState(0);
   const [timerInterval, setTimeInterval] = useState(null);
   const dispatch = useDispatch();
@@ -46,20 +44,31 @@ export default function TodoCard({ todo }) {
     };
   }, [timerInterval]);
 
+  const formatDate = (date) => {
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    const formattedDate = new Date(date).toLocaleDateString("en-US", options);
+    const [month, day, year] = formattedDate.split(" ");
+    const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+    return `${capitalizedMonth} ${day} ${year}`;
+  };
+
   const cardId = todo.id;
+  const [completed, setCompleted] = useState(false);
 
   const count = useSelector((state) => state.counter[cardId] || 0);
 
   const handleIncrement = () => {
     if (count < todo.sets) {
       dispatch(increment({ cardId }));
+    } else if (count >= todo.sets) {
+      setCompleted(true);
     }
   };
 
   return (
     <>
-      <Card border={border} className="my-3">
-        <Card.Header>{!completed && "Not"} Completed</Card.Header>
+      <Card border={completed ? "success" : "danger"} className="my-3">
+        <Card.Header>{formatDate(todo.date)}</Card.Header>
         <Card.Body>
           <Card.Title>{todo.title}</Card.Title>
           <Card.Text>{todo.description}</Card.Text>
@@ -81,6 +90,9 @@ export default function TodoCard({ todo }) {
             >
               reset
             </Button>
+            {completed && (
+              <span className="ms-1 text-success">You Did It!💪🏻</span>
+            )}
           </Card.Text>
           <p>Rest Timer: {timer} seconds</p>
           <Button onClick={startTimer}>

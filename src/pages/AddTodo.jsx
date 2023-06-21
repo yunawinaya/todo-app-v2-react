@@ -7,10 +7,10 @@ import { addTodo } from "../features/todos/todoSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function AddTodo() {
+  const [date, setDate] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [sets, setSets] = useState("");
-  const [completed, setCompleted] = useState(false);
   const loggedInUser = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,11 +19,11 @@ export default function AddTodo() {
     event.preventDefault();
     const newTodo = {
       id: Date.now(),
-      userId: loggedInUser.id,
+      userId: loggedInUser?.id,
+      date,
       title,
       description,
       sets,
-      completed,
     };
     dispatch(addTodo(newTodo));
     navigate("/");
@@ -33,6 +33,16 @@ export default function AddTodo() {
     <Container>
       <h1 className="my-3">🏋🏼 Add Your Routine</h1>
       <Form onSubmit={handleAddTodo}>
+        <Form.Group className="mb-3" controlId="date">
+          <Form.Label>Date</Form.Label>
+          <Form.Control
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+            type="date"
+            placeholder="MM/DD/YYYY"
+            required
+          />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="title">
           <Form.Label>Exercise</Form.Label>
           <Form.Control
@@ -65,14 +75,6 @@ export default function AddTodo() {
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
         </InputGroup>
-        <Form.Check
-          type="checkbox"
-          id="completed"
-          label="Mark as completed"
-          checked={completed}
-          onChange={(event) => setCompleted(event.target.checked)}
-          className="mb-3"
-        />
         <Button variant="primary" type="submit">
           Submit
         </Button>

@@ -15,16 +15,16 @@ export default function EditTodo() {
     state.todos.find((todo) => todo.id === parseInt(id))
   );
 
+  const [date, setDate] = useState(todo?.date || "");
   const [title, setTitle] = useState(todo?.title || "");
   const [description, setDescription] = useState(todo?.description || "");
   const [sets, setSets] = useState(todo?.sets || "");
-  const [completed, setCompleted] = useState(todo?.completed || false);
 
   useEffect(() => {
+    setDate(todo?.date || "");
     setTitle(todo?.title || "");
     setDescription(todo?.description || "");
     setSets(todo?.sets || "");
-    setCompleted(todo?.completed || false);
   }, [todo]);
 
   const handleUpdateTodo = (event) => {
@@ -33,10 +33,10 @@ export default function EditTodo() {
     const updatedTodo = {
       id: todo.id,
       userId: todo.userId,
+      date,
       title,
       description,
       sets,
-      completed,
     };
 
     dispatch(updateTodo(updatedTodo));
@@ -47,6 +47,15 @@ export default function EditTodo() {
     <Container>
       <h1 className="my-3">🏋🏼 Edit Your Routine</h1>
       <Form onSubmit={handleUpdateTodo}>
+        <Form.Group className="mb-3" controlId="date">
+          <Form.Label>Date</Form.Label>
+          <Form.Control
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+            type="date"
+            required
+          />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="title">
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -79,14 +88,6 @@ export default function EditTodo() {
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
         </InputGroup>
-        <Form.Check
-          type="checkbox"
-          id="completed"
-          label="Mark as completed"
-          checked={completed}
-          onChange={(e) => setCompleted(e.target.checked)}
-          className="mb-3"
-        />
         <Button variant="primary" type="submit">
           Submit
         </Button>
