@@ -1,5 +1,12 @@
 import { useSelector } from "react-redux";
-import { Col, Container, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  OverlayTrigger,
+  Popover,
+  Row,
+} from "react-bootstrap";
 import TodoCard from "../components/TodoCard";
 
 export default function Home() {
@@ -13,12 +20,23 @@ export default function Home() {
   const completionPercentage =
     totalTodos > 0 ? (completedTodos.length / totalTodos) * 100 : 0;
 
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Header as="h3">Progression Trackers</Popover.Header>
+      <Popover.Body>
+        <p>Total Workouts: {totalTodos}</p>
+        <p>Completed Workouts: {completedTodos.length}</p>
+        <p>Completion Percentage: {completionPercentage.toFixed(2)}%</p>
+      </Popover.Body>
+    </Popover>
+  );
+
   return (
     <Container>
       <h1 className="my-3">🏋🏼 Start Your Workout Routines!</h1>
-      <p>Total Workouts: {totalTodos}</p>
-      <p>Completed Workouts: {completedTodos.length}</p>
-      <p>Completion Percentage: {completionPercentage.toFixed(2)}%</p>
+      <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+        <Button variant="success">Progression Tracker</Button>
+      </OverlayTrigger>
       <Row>
         <CardGroup todos={userTodos} />
       </Row>
