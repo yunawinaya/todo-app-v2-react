@@ -113,7 +113,7 @@ export default function TodoCard({ todo }) {
       title,
       description,
       sets,
-      completed: !completed,
+      completed: false,
     };
     dispatch(updateTodo(updatedTodo));
   };
