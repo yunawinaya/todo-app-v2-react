@@ -21,11 +21,11 @@ function Layout() {
 
   return (
     <>
-      <Navbar bg="light" variant="light">
+      <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="/">Todos</Navbar.Brand>
+          <Navbar.Brand href="/">💪🏻 Workout Assistant</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="/add">Add Todo</Nav.Link>
+            <Nav.Link href="/add">Add Your Routine</Nav.Link>
           </Nav>
           <Nav>
             {loggedInUser ? (

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteTodo } from "../features/todos/todoSlice";
+import { increment, reset } from "../features/todos/counterSlice";
 
 export default function TodoCard({ todo }) {
   const completed = todo.completed;
@@ -45,6 +46,14 @@ export default function TodoCard({ todo }) {
     };
   }, [timerInterval]);
 
+  const count = useSelector((state) => state.counter.value);
+
+  const handleIncrement = () => {
+    if (count < todo.sets) {
+      dispatch(increment());
+    }
+  };
+
   return (
     <>
       <Card border={border} className="my-3">
@@ -52,7 +61,26 @@ export default function TodoCard({ todo }) {
         <Card.Body>
           <Card.Title>{todo.title}</Card.Title>
           <Card.Text>{todo.description}</Card.Text>
-          <p>Timer: {timer} seconds</p>
+          <Card.Text>
+            {count}/{todo.sets} Sets
+            <Button
+              variant="outline-secondary"
+              onClick={handleIncrement}
+              size="sm"
+              className="ms-1"
+            >
+              <i className="bi bi-plus"></i>
+            </Button>
+            <Button
+              variant="outline-secondary"
+              onClick={() => dispatch(reset())}
+              size="sm"
+              className="ms-1"
+            >
+              reset
+            </Button>
+          </Card.Text>
+          <p>Rest Timer: {timer} seconds</p>
           <Button onClick={startTimer}>
             <i className="bi bi-play"></i>
           </Button>

@@ -10,11 +10,12 @@ const todosSlice = createSlice({
       state.push(action.payload);
     },
     updateTodo: (state, action) => {
-      const { id, title, description, completed } = action.payload;
+      const { id, title, description, sets, completed } = action.payload;
       const todo = state.find((todo) => todo.id === id);
       if (todo) {
         todo.title = title;
         todo.description = description;
+        todo.sets = sets;
         todo.completed = completed;
       }
     },

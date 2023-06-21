@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <Container>
-      <h1 className="my-3">Your todos</h1>
+      <h1 className="my-3">🏋🏼 Start Your Workout Routines!</h1>
       <Row>
         <CardGroup todos={userTodos} />
       </Row>

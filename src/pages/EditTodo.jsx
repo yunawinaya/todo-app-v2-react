@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import { Button, InputGroup } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,11 +17,13 @@ export default function EditTodo() {
 
   const [title, setTitle] = useState(todo?.title || "");
   const [description, setDescription] = useState(todo?.description || "");
+  const [sets, setSets] = useState(todo?.sets || "");
   const [completed, setCompleted] = useState(todo?.completed || false);
 
   useEffect(() => {
     setTitle(todo?.title || "");
     setDescription(todo?.description || "");
+    setSets(todo?.sets || "");
     setCompleted(todo?.completed || false);
   }, [todo]);
 
@@ -33,6 +35,7 @@ export default function EditTodo() {
       userId: todo.userId,
       title,
       description,
+      sets,
       completed,
     };
 
@@ -42,7 +45,7 @@ export default function EditTodo() {
 
   return (
     <Container>
-      <h1 className="my-3">Edit Todo</h1>
+      <h1 className="my-3">🏋🏼 Edit Your Routine</h1>
       <Form onSubmit={handleUpdateTodo}>
         <Form.Group className="mb-3" controlId="title">
           <Form.Label>Title</Form.Label>
@@ -65,6 +68,17 @@ export default function EditTodo() {
             required
           />
         </Form.Group>
+        <Form.Label>Sets Goal</Form.Label>
+        <InputGroup className="mb-3" controlId="sets">
+          <Form.Control
+            value={sets}
+            onChange={(event) => setSets(event.target.value)}
+            type="number"
+            placeholder="8"
+            required
+          />
+          <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
+        </InputGroup>
         <Form.Check
           type="checkbox"
           id="completed"
