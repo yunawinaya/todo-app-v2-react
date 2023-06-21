@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Card, Modal } from "react-bootstrap";
+import { Button, Card, Modal, Toast } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTodo, updateTodo } from "../features/todos/todoSlice";
 import { increment, reset } from "../features/todos/counterSlice";
@@ -70,11 +70,31 @@ export default function TodoCard({ todo }) {
     setCompleted(todo?.completed || false);
   }, [todo]);
 
+  const [showReminder, setShowReminder] = useState(false);
+
+  let inactiveTimer;
+
   const handleIncrement = () => {
     if (count < todo.sets) {
       dispatch(increment({ cardId }));
+      clearTimeout(inactiveTimer);
+      inactiveTimer = setTimeout(() => {
+        setShowReminder(true);
+      }, 30000);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(inactiveTimer);
+    };
+  }, [inactiveTimer]);
+
+  useEffect(() => {
+    if (count >= todo.sets) {
+      clearTimeout(inactiveTimer);
+    }
+  }, [count, todo.sets, inactiveTimer]);
 
   useEffect(() => {
     if (count >= todo.sets) {
@@ -120,6 +140,21 @@ export default function TodoCard({ todo }) {
 
   return (
     <>
+      <Toast
+        show={showReminder}
+        bg="dark"
+        onClose={() => setShowReminder(false)}
+        delay={5000}
+        autohide
+        style={{ position: "fixed", top: 20, right: 20 }}
+      >
+        <Toast.Header>
+          <strong className="me-auto">Exercise Reminder</strong>
+        </Toast.Header>
+        <Toast.Body className="text-white">
+          It&apos;s time to exercise! You can do it💪🏻
+        </Toast.Body>
+      </Toast>
       <Card border={completed ? "success" : "danger"} className="my-3">
         <Card.Header>{formatDate(todo.date)}</Card.Header>
         <Card.Body>
