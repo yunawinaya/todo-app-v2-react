@@ -18,6 +18,7 @@ export default function AddTodo() {
 
   function handleAddTodo(event) {
     event.preventDefault();
+    setCompleted(false);
     const newTodo = {
       id: Date.now(),
       userId: loggedInUser?.id,
@@ -76,14 +77,6 @@ export default function AddTodo() {
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
         </InputGroup>
-        <Form.Check
-          type="checkbox"
-          id="completed"
-          label="Mark as completed"
-          checked={completed}
-          onChange={(event) => setCompleted(event.target.checked)}
-          className="mb-3"
-        />
         <Button variant="primary" type="submit">
           Submit
         </Button>

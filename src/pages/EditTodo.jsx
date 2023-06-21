@@ -91,14 +91,6 @@ export default function EditTodo() {
           />
           <InputGroup.Text id="basic-addon2">Sets</InputGroup.Text>
         </InputGroup>
-        <Form.Check
-          type="checkbox"
-          id="completed"
-          label="Mark as completed"
-          checked={completed}
-          onChange={(e) => setCompleted(e.target.checked)}
-          className="mb-3"
-        />
         <Button variant="primary" type="submit">
           Submit
         </Button>
