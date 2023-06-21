@@ -41,7 +41,6 @@ export default function AddTodo() {
             value={date}
             onChange={(event) => setDate(event.target.value)}
             type="date"
-            placeholder="MM/DD/YYYY"
             required
           />
         </Form.Group>
